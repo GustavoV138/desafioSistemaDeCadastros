@@ -1,11 +1,25 @@
 package service;
 
+import repository.PetRepository;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public abstract class Inicio {
+public class MenuService {
+
+    private static PetRepository petRepository = new PetRepository();
+    private static PetService petService = new PetService();
+
+    public MenuService(){}
+
+    public static void exibirFormulario() {
+        petRepository.exibirFormulario();
+    }
 
     public static void exibirListaMenu() {
+
         System.out.println();
         System.out.println("----------Menu Inicial----------");
         System.out.println("1.Cadastrar um novo pet");
@@ -27,39 +41,41 @@ public abstract class Inicio {
             System.out.print("\nDigite uma opção: ");
 
             try {
-                opcao = sc.nextInt(); // aqui pode lançar um InputMismatchException, tem que tratar
+                opcao = sc.nextInt();
             } catch (InputMismatchException e) {
                 sc.next();
                 System.out.println("\nVocê digitou um valor não aceito. (InputMismatchException)");
             }
 
             switch (opcao) {
-//                case 1:
-//                    cadastrarPet();
-//                    break;
+                case 1:
+                    petService.cadastrarPet();
+                    exibirListaMenu();
+                    break;
 //
 //                case 2:
 //                    alterarDadosPet();
+                //    exibirListaMenu();
 //                    break;
 //
 //                case 3:
 //                    deletarPet();
+//                exibirListaMenu();
 //                    break;
 //
 //                case 4:
 //                    listarTodosPets();
+//                exibirListaMenu();
 //                    break;
 //
 //                case 5:
 //                    listarPetsPor();
+//                exibirListaMenu();
 //                    break;
 
                 case 6:
                     isTrue = false;
                     System.out.println("\nAté mais!");
-                    break;
-
-                case 0:
                     break;
 
                 default:

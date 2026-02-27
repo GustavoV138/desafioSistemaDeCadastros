@@ -1,24 +1,19 @@
-import service.Inicio;
+import entities.Pet;
+import entities.Sexo;
+import service.MenuService;
 
-import java.io.*;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.chrono.Chronology;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
 
-        File file = new File("formulario.txt");
+        MenuService.exibirFormulario();
+        MenuService.exibirListaMenu();
+        MenuService.escolhaUsuario();
 
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        String linha;
-
-        while ((linha = bufferedReader.readLine()) != null) {
-            System.out.println(linha);
-        }
-
-        Inicio.exibirListaMenu();
-        Inicio.escolhaUsuario();
     }
 }
