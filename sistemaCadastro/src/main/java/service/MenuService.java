@@ -1,9 +1,6 @@
 package service;
 
 import repository.PetRepository;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -14,11 +11,7 @@ public class MenuService {
 
     public MenuService(){}
 
-    public static void exibirFormulario() {
-        petRepository.exibirFormulario();
-    }
-
-    public static void exibirListaMenu() {
+    private static void exibirListaMenu() {
 
         System.out.println();
         System.out.println("----------Menu Inicial----------");
@@ -26,7 +19,7 @@ public class MenuService {
         System.out.println("2.Alterar os dados do pet cadastrado");
         System.out.println("3.Deletar um pet cadastrado");
         System.out.println("4.Listar todos os pets cadastrados");
-        System.out.println("5.Listar pets por nome, idade ou raça");
+        System.out.println("5.Listar por parâmetro. (Nome, raça, ...)");
         System.out.println("6.Sair");
     }
 
@@ -35,6 +28,8 @@ public class MenuService {
         Scanner sc = new Scanner(System.in);
         boolean isTrue = true;
         int opcao = 0;
+
+        exibirListaMenu();
 
         while (isTrue) {
 
@@ -68,10 +63,14 @@ public class MenuService {
 //                exibirListaMenu();
 //                    break;
 //
-//                case 5:
-//                    listarPetsPor();
-//                exibirListaMenu();
-//                    break;
+                case 5:
+                    try {
+                        petService.lerCriterio();
+                    } catch (InputMismatchException e) {
+                        e.printStackTrace();
+                    }
+                    exibirListaMenu();
+                    break;
 
                 case 6:
                     isTrue = false;

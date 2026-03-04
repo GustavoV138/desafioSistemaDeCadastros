@@ -1,34 +1,59 @@
 package repository;
 
 import entities.Pet;
+import exceptions.NenhumArquivoNaBaseDadosException;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PetRepository {
 
-    private final File DIRECTORY = new File("BaseDados");
-    private final File FORMULARIO = new File(DIRECTORY, "formulario.txt");
+    private final File FORMULARIO = new File("formulario.txt");
 
     private final File PETS_DIRECTORY = new File("petsCadastrados");
 
     public PetRepository() {
     }
 
-    public void criarBaseDados() {
-        DIRECTORY.mkdir();
+    public void criarFormulario() {
+        try (FileWriter fileWriter = new FileWriter(FORMULARIO);
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
 
-        try {
             FORMULARIO.createNewFile();
+
+            bufferedWriter.write("1 - Qual o nome do pet?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("2 - Qual o sobrenome do pet?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("3 - Qual o tipo do pet (Cachorro/Gato)?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("4 - Qual o sexo do pet?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("5 - Qual a raça do pet?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("6 - Em que rua o pet foi encontrado?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("7 - Em que cidade o pet foi encontrado?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("8 - Qual o número da casa?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("9 - Qual a idade aproximada do pet?");
+            bufferedWriter.newLine();
+            bufferedWriter.write("10 - Qual o peso aproximado do pet?");
+            bufferedWriter.newLine();
+
         } catch (IOException e) {
             System.out.println("Arquivo não pôde ser criado.");
             e.printStackTrace();
         }
     }
 
-    public void deletarBaseDados() {
+    public void deletarFormulario() {
         FORMULARIO.delete();
     }
 
@@ -66,11 +91,19 @@ public class PetRepository {
         LocalDateTime horaAgora = LocalDateTime.now();
 
         String dataFormatadaArquivo = horaAgora.format(padraoDataArquivos);
-        String nomeSobrenomeArquivo = (pet.getNome() + pet.getSobrenome()).trim();
+        String nomeSobrenomeArquivo = (pet.getNome() + pet.getSobrenome()).toUpperCase();
+        StringBuilder sbNomeSobrenome = new StringBuilder();
+
+        Pattern padraoAZ = Pattern.compile("[a-zA-Z]");
+        Matcher matcherNomeSobrenome = padraoAZ.matcher(nomeSobrenomeArquivo);
+
+        while(matcherNomeSobrenome.find()){
+            sbNomeSobrenome.append(matcherNomeSobrenome.group());
+        }
 
         PETS_DIRECTORY.mkdir();
 
-        File arquivoPet = new File(PETS_DIRECTORY, (dataFormatadaArquivo + "-" + nomeSobrenomeArquivo.toUpperCase()) + ".txt");
+        File arquivoPet = new File(PETS_DIRECTORY, (dataFormatadaArquivo + "-" + sbNomeSobrenome + ".txt"));
 
         try {
             if (arquivoPet.createNewFile()) {
@@ -85,23 +118,52 @@ public class PetRepository {
         try (FileWriter fw = new FileWriter(arquivoPet, true);
              BufferedWriter arquivoWriter = new BufferedWriter(fw)) {
 
-            arquivoWriter.write("1 - " + pet.getNome() + " " + pet.getSobrenome());
+            arquivoWriter.write(pet.getNome() + " " + pet.getSobrenome());
             arquivoWriter.newLine();
-            arquivoWriter.write("2 - " + pet.getTipo());
+            arquivoWriter.write(pet.getTipo().TIPO);
             arquivoWriter.newLine();
-            arquivoWriter.write("3 - " + pet.getSexo());
+            arquivoWriter.write(pet.getSexo().SEXO);
             arquivoWriter.newLine();
-            arquivoWriter.write("4 - " + pet.getRua() + ", " + pet.getNumCasa() + ", " + pet.getCidade());
+            arquivoWriter.write(pet.getRua() + "," + pet.getNumCasa() + "," + pet.getCidade());
             arquivoWriter.newLine();
-            arquivoWriter.write("5 - " + pet.getIdade() + " anos");
+            arquivoWriter.write(pet.getIdade() + " anos");
             arquivoWriter.newLine();
-            arquivoWriter.write("6 - " + pet.getPeso() + "kg");
+            arquivoWriter.write(pet.getPeso() + "kg");
             arquivoWriter.newLine();
-            arquivoWriter.write("7 - " + pet.getRaca());
+            arquivoWriter.write(pet.getRaca());
 
         } catch (IOException e) {
 
         }
 
     }
+
+    public ArrayList<StringBuilder> buscarArquivos() throws IOException {
+
+        File file = new File(PETS_DIRECTORY.toString());
+
+        File[] filesArray = file.listFiles();
+        ArrayList<StringBuilder> list = new ArrayList<>();
+
+        for (File f : filesArray) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(f));
+            String s;
+            StringBuilder conteudoArquivos = new StringBuilder();
+
+            while ((s = bufferedReader.readLine()) != null) {
+                conteudoArquivos.append(s + ",");
+            }
+
+            bufferedReader.close();
+            list.add(conteudoArquivos);
+        }
+
+        if(list.isEmpty()) {
+            throw new NenhumArquivoNaBaseDadosException();
+        }
+
+        return list;
+        // Posso usar o criterio passado, o nome pox exemplo como parametro na string do regex
+    }
+
 }
