@@ -48,21 +48,21 @@ public class MenuService {
                     exibirListaMenu();
                     break;
 //
-//                case 2:
-//                    alterarDadosPet();
-                //    exibirListaMenu();
-//                    break;
+                case 2:
+                    petService.alterarPet();
+                    exibirListaMenu();
+                    break;
 //
 //                case 3:
 //                    deletarPet();
 //                exibirListaMenu();
 //                    break;
 //
-//                case 4:
-//                    listarTodosPets();
-//                exibirListaMenu();
-//                    break;
-//
+                case 4:
+                    petService.listarTodosPets();
+                    exibirListaMenu();
+                    break;
+
                 case 5:
                     try {
                         petService.lerCriterio();

@@ -143,26 +143,31 @@ public class PetRepository {
         File file = new File(PETS_DIRECTORY.toString());
 
         File[] filesArray = file.listFiles();
-        ArrayList<StringBuilder> list = new ArrayList<>();
+        ArrayList<StringBuilder> listaStringBuilders = new ArrayList<>();
+
+        if(filesArray == null){
+            throw new NenhumArquivoNaBaseDadosException();
+        }
 
         for (File f : filesArray) {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(f));
             String s;
-            StringBuilder conteudoArquivos = new StringBuilder();
+            StringBuilder conteudoArquivos = new StringBuilder(); // Dentro de cada Stringbuilder vai ficar todos os dados de um arquivo
+
 
             while ((s = bufferedReader.readLine()) != null) {
-                conteudoArquivos.append(s + ",");
+                conteudoArquivos.append(s + ","); // Separando cada linha do arquivo por ','
             }
 
             bufferedReader.close();
-            list.add(conteudoArquivos);
+            listaStringBuilders.add(conteudoArquivos); // Ao fim de cada iteração um novo StringBuilder é adicionado no ArrayList
         }
 
-        if(list.isEmpty()) {
-            throw new NenhumArquivoNaBaseDadosException();
-        }
+//        if(listaStringBuilders.isEmpty()) {
+//
+//        }
 
-        return list;
+        return listaStringBuilders;
         // Posso usar o criterio passado, o nome pox exemplo como parametro na string do regex
     }
 
