@@ -530,7 +530,7 @@ public class PetService {
                     criterio2 = sc.nextLine();
                     String novoNome = sc.nextLine();
 
-                    while(scan.hasNext()){
+                    while (scan.hasNext()) {
                         nomeEsobrenome.add(scan.next());
                     }
 
@@ -561,7 +561,7 @@ public class PetService {
                     criterio2 = sc.nextLine();
                     String novoSobrenome = sc.nextLine();
 
-                    while(scan.hasNext()){
+                    while (scan.hasNext()) {
                         nomeEsobrenome.add(scan.next());
                     }
 
@@ -762,7 +762,7 @@ public class PetService {
                 Matcher matcher = pattern.matcher(sb.toString().toLowerCase()); // Transforma toda a linha em lowerCase antes de comparar com o pattern
 
                 if (matcher.find()) {
-                        listaPets.add(sb);
+                    listaPets.add(sb);
                 }
             }
         } catch (IOException e) {
@@ -840,5 +840,157 @@ public class PetService {
     public void alterarPet() {
         System.out.println("\nInsira as informações do pet que deseja alterar.");
         lerPetAlteracao();
+    }
+
+    public void deletarPet() {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<StringBuilder> listaPetsAlterar = new ArrayList<>();
+
+        System.out.print("\nTipo do pet (Cachorro/Gato): ");
+        String criterio1 = sc.nextLine().toLowerCase();
+        String criterio2;
+
+        if (!(criterio1.equals("cachorro") || criterio1.equals("gato"))) {
+            System.out.println("\nTipo de pet inválido.");
+            return;
+        }
+
+
+        System.out.println("\nDeseja adicionar mais algum critério?\n");
+        System.out.println("1 - Nome");
+        System.out.println("2 - Sobrenome");
+        System.out.println("3 - Idade");
+        System.out.println("4 - Sexo");
+        System.out.println("5 - Peso");
+        System.out.println("6 - Raça");
+        System.out.println("7 - Endereço (Rua/Cidade/Núm. da casa)");
+        System.out.println("8 - Seguir sem critério adicional");
+        System.out.println("9 - Voltar para o menu inicial");
+
+        System.out.print("\nDigite sua escolha: ");
+        int escolha = sc.nextInt();
+
+        switch (escolha) {
+
+            case 1:
+                System.out.print("Digite o nome do pet: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 2:
+                System.out.print("Digite o Sobrenome do pet: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 3:
+                System.out.print("Digite a idade do pet: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 4:
+                System.out.print("Digite o sexo do pet: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 5:
+                System.out.print("Digite o peso do pet: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 6:
+                System.out.print("Digite a raça do pet: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 7:
+                System.out.print("Digite o endereço que o pet foi encontrado: ");
+                criterio2 = sc.nextLine();
+                criterio2 = sc.nextLine();
+                listaPetsAlterar.addAll(buscarPet(criterio1, criterio2));
+                break;
+
+            case 8:
+                listarPorCriterio(criterio1);
+                listaPetsAlterar.addAll(buscarPet(criterio1));
+                break;
+
+            case 9:
+                break;
+
+            default:
+                System.out.println("\nVocê digitou um valor inválido. Pressione 'Enter' para tentar novamente.");
+                new Scanner(System.in).nextLine();
+                lerPetAlteracao();
+                break;
+        }
+
+        System.out.print("\nSelecione o pet que deseja excluir: ");
+        int numPet = sc.nextInt();
+
+        StringBuilder sb = listaPetsAlterar.get(numPet - 1);
+
+        Scanner scanner = new Scanner(sb.toString());
+        scanner.useDelimiter(",");
+        String nomeSobrenome = null, tipoPet = null, sexo = null, rua = null, numCasa = null, cidade = null, idade = null, peso = null, raca = null;
+
+        while (scanner.hasNext()) {
+            nomeSobrenome = scanner.next();
+            tipoPet = scanner.next();
+            sexo = scanner.next();
+            rua = scanner.next();
+            numCasa = scanner.next();
+            cidade = scanner.next();
+            idade = scanner.next();
+            peso = scanner.next();
+            raca = scanner.next();
+        }
+
+        Pattern pattern = Pattern.compile(nomeSobrenome.replaceAll("\\s+", "").toUpperCase());
+
+        File f = new File("petsCadastrados");
+        File[] arrayFiles = f.listFiles();
+
+        StringBuilder arquivoEncontrado = new StringBuilder();
+
+        for (File file : arrayFiles) {
+            Matcher matcher = pattern.matcher(file.getName());
+
+            if (matcher.find()) {
+                arquivoEncontrado.append(file.getName());
+            }
+        }
+
+        File arquivo = new File(f, arquivoEncontrado.toString());
+
+        System.out.print("\nVocê tem certeza que deseja excluir o pet selecionado? (Sim/Não) :");
+        sc.nextLine();
+        String res = sc.nextLine().toLowerCase();
+
+        if (res.startsWith("n")) {
+            return;
+        } else if (res.startsWith("s")) {
+            if (arquivo.delete()) {
+                System.out.println("\nPet deletado com sucesso!\n\n Pressione 'Enter' para continuar!");
+                sc.nextLine();
+            } else {
+                System.out.println("\nOcorreu um erro durante a exclusão do Pet!\n\n Pressione 'Enter' para continuar!");
+                sc.nextLine();
+            }
+        } else {
+            System.out.println("\nVocê digitou um valor não aceito.");
+            return;
+        }
     }
 }

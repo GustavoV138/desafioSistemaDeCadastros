@@ -1,6 +1,7 @@
 package service;
 
 import repository.PetRepository;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,7 +10,8 @@ public class MenuService {
     private static PetRepository petRepository = new PetRepository();
     private static PetService petService = new PetService();
 
-    public MenuService(){}
+    public MenuService() {
+    }
 
     private static void exibirListaMenu() {
 
@@ -47,17 +49,17 @@ public class MenuService {
                     petService.cadastrarPet();
                     exibirListaMenu();
                     break;
-//
+
                 case 2:
                     petService.alterarPet();
                     exibirListaMenu();
                     break;
-//
-//                case 3:
-//                    deletarPet();
-//                exibirListaMenu();
-//                    break;
-//
+
+                case 3:
+                    petService.deletarPet();
+                    exibirListaMenu();
+                    break;
+
                 case 4:
                     petService.listarTodosPets();
                     exibirListaMenu();
