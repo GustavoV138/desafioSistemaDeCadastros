@@ -523,6 +523,12 @@ public class PetService {
             Scanner scan = new Scanner(nomeSobrenome);
             scan.useDelimiter(" ");
 
+            Scanner nomeArquivo = new Scanner(arquivo.getName());
+            nomeArquivo.useDelimiter("-");
+
+            String dataNomeArquivo = null;
+            String novoNomeArquivo = null;
+
             switch (opcao) {
 
                 case 1:
@@ -534,8 +540,13 @@ public class PetService {
                         nomeEsobrenome.add(scan.next());
                     }
 
-                    nome = nomeEsobrenome.get(0);
                     sobrenome = nomeEsobrenome.get(1);
+
+                    if (nomeEsobrenome.size() > 2) {
+                        for (int i = 2; i < nomeEsobrenome.size(); i++) {
+                            sobrenome = sobrenome.concat(" " + nomeEsobrenome.get(i));
+                        }
+                    }
 
                     alterarArquivo.write("");
 
@@ -553,7 +564,18 @@ public class PetService {
                     alterarArquivo.newLine();
                     alterarArquivo.write(raca);
                     alterarArquivo.newLine();
-                    System.out.println("\nPet alterado com sucesso.");
+
+                    alterarArquivo.close();
+//                    Alteracao do Nome do arquivo
+
+                    dataNomeArquivo = nomeArquivo.next();
+                    novoNomeArquivo = (novoNome + sobrenome).toUpperCase();
+
+                    if (arquivo.renameTo(new File("petsCadastrados", dataNomeArquivo + "-" + novoNomeArquivo.replace(" ", "") + ".txt"))) {
+                        System.out.println("\nPet alterado com sucesso.");
+                    } else {
+                        System.out.println("\nDeu alguma merda por aqui.");
+                    }
                     break;
 
                 case 2:
@@ -566,7 +588,6 @@ public class PetService {
                     }
 
                     nome = nomeEsobrenome.get(0);
-                    sobrenome = nomeEsobrenome.get(1);
 
                     alterarArquivo.write("");
 
@@ -584,7 +605,19 @@ public class PetService {
                     alterarArquivo.newLine();
                     alterarArquivo.write(raca);
                     alterarArquivo.newLine();
-                    System.out.println("\nPet alterado com sucesso.");
+
+                    alterarArquivo.close();
+                    //                    Alteracao do Nome do arquivo
+
+                    dataNomeArquivo = nomeArquivo.next();
+                    novoNomeArquivo = (nome + novoSobrenome).toUpperCase();
+
+                    if (arquivo.renameTo(new File(dataNomeArquivo + "-" + novoNomeArquivo.replace(" ", "") + ".txt"))) {
+                        System.out.println("\nPet alterado com sucesso.");
+                    } else {
+                        System.out.println("Deu caquinha!");
+                    }
+
                     break;
 
                 case 3:
